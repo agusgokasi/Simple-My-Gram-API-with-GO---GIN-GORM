@@ -1,0 +1,494 @@
+definitions:
+  helper.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  model.CommentRequest:
+    properties:
+      message:
+        example: Test New Comment
+        type: string
+    type: object
+  model.PhotoRequest:
+    properties:
+      caption:
+        example: New Photo Caption
+        type: string
+      photo_url:
+        example: https://via.placeholder.com/150/92c952
+        type: string
+      title:
+        example: New Photo Title
+        type: string
+    type: object
+  model.SocialMediaRequest:
+    properties:
+      name:
+        example: Agus Gokasi
+        type: string
+      social_media_url:
+        example: https://www.facebook.com/agusgokasi1/
+        type: string
+    type: object
+  model.UserLoginRequest:
+    properties:
+      email:
+        example: agusgokasi@gmail.com
+        type: string
+      password:
+        example: "123456"
+        type: string
+    type: object
+  model.UserRequest:
+    properties:
+      age:
+        example: 25
+        type: integer
+      email:
+        example: agusgokasi@gmail.com
+        type: string
+      password:
+        example: "123456"
+        type: string
+      username:
+        example: Agus Setiawan
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /comments/{commentId}:
+    delete:
+      consumes:
+      - application/json
+      description: Use this API to delete an existing comment by ID (need authorization
+        bearer token in headers and comment token in headers)
+      parameters:
+      - description: Comment ID
+        in: path
+        name: commentId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth, commentTokenAuth: []
+      summary: Delete an existing comment by ID
+      tags:
+      - comments
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get detail comment by ID (need authorization bearer
+        token in headers)
+      parameters:
+      - description: Comment ID
+        in: path
+        name: commentId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Show a comment by ID
+      tags:
+      - comments
+    put:
+      consumes:
+      - application/json
+      description: Use this API to update an existing comment by ID (need authorization
+        bearer token in headers and comment token in headers)
+      parameters:
+      - description: Comment ID
+        in: path
+        name: commentId
+        required: true
+        type: integer
+      - description: Comment request object
+        in: body
+        name: comment_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth, commentTokenAuth: []
+      summary: Update an existing comment by ID
+      tags:
+      - comments
+  /photos:
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get all photos with pagination (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Page number, set -1 for all pages
+        in: query
+        name: page
+        type: integer
+      - description: Limit per page, set -1 for unlimited
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Get all photos
+      tags:
+      - photos
+    post:
+      consumes:
+      - application/json
+      description: Use this API to create a new photo (need authorization bearer token
+        in headers)
+      parameters:
+      - description: Photo request object
+        in: body
+        name: photo_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Create a new photo
+      tags:
+      - photos
+  /photos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Use this API to delete an existing photo by ID (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Delete an existing photo
+      tags:
+      - photos
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get detail photo by id (need authorization bearer
+        token in headers)
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Show a photo
+      tags:
+      - photos
+    put:
+      consumes:
+      - application/json
+      description: Use this API to update an existing photo by ID (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Photo request object
+        in: body
+        name: photo_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Update an existing photo
+      tags:
+      - photos
+  /photos/{photoId}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get all comments on a photo with pagination (need
+        authorization bearer token in headers)
+      parameters:
+      - description: Photo ID
+        in: path
+        name: photoId
+        required: true
+        type: integer
+      - description: Page number, set -1 for all pages
+        in: query
+        name: page
+        type: integer
+      - description: Limit per page, set -1 for unlimited
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Get all comments on a photo
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      description: Use this API to create a new comment on a photo (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Photo ID
+        in: path
+        name: photoId
+        required: true
+        type: integer
+      - description: Comment request object
+        in: body
+        name: comment_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Create a new comment on a photo
+      tags:
+      - comments
+  /social-media:
+    delete:
+      consumes:
+      - application/json
+      description: Use this API to delete an existing social media account by ID (need
+        authorization bearer token in headers and social media token in headers)
+      parameters:
+      - description: Social Media ID
+        in: path
+        name: socialMediaId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth, socialMediaTokenAuth: []
+      summary: Delete an existing social media account
+      tags:
+      - social media
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get all social media accounts with pagination (need
+        authorization bearer token in headers)
+      parameters:
+      - description: Page number, set -1 for all pages
+        in: query
+        name: page
+        type: integer
+      - description: Limit per page, set -1 for unlimited
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Get all social media accounts
+      tags:
+      - social media
+    post:
+      consumes:
+      - application/json
+      description: Use this API to create a new social media account (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Social media request object
+        in: body
+        name: social_media_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialMediaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Create a new social media account
+      tags:
+      - social media
+    put:
+      consumes:
+      - application/json
+      description: Use this API to update an existing social media account by ID (need
+        authorization bearer token in headers and social media token in headers)
+      parameters:
+      - description: Social media request object
+        in: body
+        name: social_media_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialMediaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth, socialMediaTokenAuth: []
+      summary: Update an existing social media account
+      tags:
+      - social media
+  /social-media/{socialMediaId}:
+    get:
+      consumes:
+      - application/json
+      description: Use this API to get detail social media account by ID (need authorization
+        bearer token in headers)
+      parameters:
+      - description: Social Media ID
+        in: path
+        name: socialMediaId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - bearerAuth: []
+      summary: Show a social media account
+      tags:
+      - social media
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Use this api to login a user
+      parameters:
+      - description: User request object
+        in: body
+        name: user_login_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      summary: login user
+      tags:
+      - users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Use this api to register a new user
+      parameters:
+      - description: User request object
+        in: body
+        name: user_request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+      summary: Register a new user
+      tags:
+      - users
+swagger: "2.0"
